@@ -7,7 +7,7 @@ import { MenuIcon } from 'lucide-react';
 import Logo, { LogoMobile } from './Logo';
 import { items } from '@/constants';
 import { NavbarItem } from './DesktopNavbar';
-import { ModeToggle } from './mode-toggle';
+import { TheneSwitcherBtn } from './ThemeSwitcherBtn';
 import { UserButton } from '@clerk/nextjs';
 
 function MobileNavbar() {
@@ -39,7 +39,7 @@ function MobileNavbar() {
           <LogoMobile />
         </div>
         <div className="flex items-center gap-2">
-          <ModeToggle />
+          <TheneSwitcherBtn />
           <UserButton afterSignOutUrl="/sign-in" />
         </div>
       </nav>

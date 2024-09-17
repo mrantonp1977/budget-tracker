@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from './ui/button';
-import { ModeToggle } from './mode-toggle';
+import { TheneSwitcherBtn } from './ThemeSwitcherBtn';
 import { UserButton } from '@clerk/nextjs';
 
 function DesktopNavbar() {
@@ -27,7 +27,7 @@ function DesktopNavbar() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <ModeToggle />
+          <TheneSwitcherBtn />
           <UserButton afterSignOutUrl="/sign-in" />
         </div>
       </nav>
