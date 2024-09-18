@@ -36,7 +36,7 @@ function CategoryPicker({ type, onChange }: Props) {
   useEffect(() => {
     if (!value) return;
     onChange(value);
-  }, [onchange, value]);
+  }, [onChange, value, ]);
 
 
   const categoriesQuery = useQuery({

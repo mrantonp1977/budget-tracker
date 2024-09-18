@@ -41,27 +41,23 @@ model Transaction {
   categoryIcon String
 }
 
-
 model MonthHistory {
-  userId    String
-  day      Int
-  month     Int
-  year      Int
-  income    Float
-  expense   Float
-  
+  userId  String
+  day     Int
+  month   Int
+  year    Int
+  income  Float
+  expense Float
 
   @@unique([userId, day, month, year])
 }
 
 model YearHistory {
-  userId    String
-  month     Int
-  year      Int
-  income    Float
-  expense   Float
-  
+  userId  String
+  month   Int
+  year    Int
+  income  Float
+  expense Float
 
   @@unique([userId, year, month])
 }
-  
