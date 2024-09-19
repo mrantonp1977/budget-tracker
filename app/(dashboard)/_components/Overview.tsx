@@ -6,6 +6,8 @@ import { UserSettings } from '@prisma/client';
 import { differenceInDays, startOfMonth } from 'date-fns';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
+import StatsCards from './StatsCards';
+import CategoriesStats from './CategoriesStats';
 
 function Overview({ userSettings }: { userSettings: UserSettings }) {
   // const now = new Date()
@@ -15,7 +17,7 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
   });
   return (
     <>
-      <div className="container flex flex-wrap items-end justify-between px-7 py-8">
+      <div className="flex flex-wrap items-end justify-between px-7 py-8">
         <h2 className="text-3xl font-bold">Overview</h2>
         <div className="flex items-center gap-3">
           <DateRangePicker
@@ -26,12 +28,28 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
               const { from, to } = values.range;
               if (!from || !to) return;
               if (differenceInDays(to, from) > MAX_DATE_RANGE_DAYS) {
-                toast.error(`Date range cannot exceed ${MAX_DATE_RANGE_DAYS} days`);
+                toast.error(
+                  `Date range cannot exceed ${MAX_DATE_RANGE_DAYS} days`
+                );
                 return;
               }
               setDateRange({ from, to });
             }}
           />
+        </div>
+      </div>
+      <div className="flex w-full flex-col px-8 py-4">
+        <StatsCards
+          userSettings={userSettings}
+          from={dateRange.from}
+          to={dateRange.to}
+        />
+        <div className="pt-5">
+        <CategoriesStats 
+          userSettings={userSettings}
+          from={dateRange.from}
+          to={dateRange.to}
+        />
         </div>
       </div>
     </>
