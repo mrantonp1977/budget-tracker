@@ -20,11 +20,9 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
 
   const { amount, category, date, description, type } = parsedBody.data;
 
-  const transactionDate = date ? new Date(date) : new Date();
+  
 
-  if (isNaN(transactionDate.getTime())) {
-    throw new Error("Invalid date format");
-  }
+  
 
   const categoryRow = await prisma.category.findFirst({
     where: {
@@ -37,17 +35,14 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
     throw new Error("Category not found");
   }
 
-  const now = new Date();
-  const day = now.getUTCDate();
-  const month = now.getUTCMonth();
-  const year = now.getUTCFullYear();
+  
 
   await prisma.$transaction([
     prisma.transaction.create({
       data: {
         userId: user.id,
         amount,
-        date: now,
+        date,
         description: description || "",
         type,
         category: categoryRow.name,
@@ -59,16 +54,17 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
       where: {
         userId_day_month_year: {
           userId: user.id,
-          day,
-          month,
-          year,
+          day: date.getUTCDate(),
+          month: date.getUTCMonth() + 1,
+          year: date.getUTCFullYear(),
+          
         },
       },
       create: {
         userId: user.id,
-        day,
-        month,
-        year,
+        day: date.getUTCDate(),
+        month: date.getUTCMonth() + 1,
+        year: date.getUTCFullYear(),
         expense: type === "expense" ? amount : 0,
         income: type === "income" ? amount : 0,
       },
@@ -86,14 +82,14 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
       where: {
         userId_year_month: {
           userId: user.id,
-          month,
-          year,
+          month: date.getUTCMonth() + 1,
+          year: date.getUTCFullYear(),
         },
       },
       create: {
         userId: user.id,
-        month,
-        year,
+        month: date.getUTCMonth() + 1,
+        year: date.getUTCFullYear(),
         expense: type === "expense" ? amount : 0,
         income: type === "income" ? amount : 0,
       },

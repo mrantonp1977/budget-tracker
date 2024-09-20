@@ -24,7 +24,7 @@ async function page() {
   }
 
   return (
-    <div className="h-full bg-background">
+    <div className="h-full">
       <div className="border-b bg-card">
         <div className="flex flex-wrap items-center justify-between px-7 py-8">
           <p className="text-3xl font-bold">

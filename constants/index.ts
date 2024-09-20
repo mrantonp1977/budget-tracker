@@ -12,4 +12,9 @@ export const items = [
     link: "/manage"
   },
   
+  {
+    label: 'Profile Settings',
+    link: "/profile-settings"
+  },
+  
 ];

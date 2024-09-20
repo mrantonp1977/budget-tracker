@@ -202,10 +202,8 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
             <>
               <Button
                 type="button"
-                variant={'destructive'}
-                onClick={() => {
-                  form.reset();
-                }}
+                variant={'secondary'}
+                onClick={() => setOpen((prev) => !prev)}
                 className="mr-4"
               >
                 Cancel

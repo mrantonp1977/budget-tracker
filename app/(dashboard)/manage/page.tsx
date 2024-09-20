@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { TransactionType } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
-import { PlusSquare, Trash, TrendingDown, TrendingUp } from 'lucide-react';
+import { Plus, PlusSquare, Trash, TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react';
 import CreateCategoryDialog from '../_components/CreateCategoryDialog';
 import { Button } from '@/components/ui/button';
@@ -36,7 +36,7 @@ function page() {
       <div className="flex flex-col px-4 p-4">
         <Card>
           <CardHeader>
-            <CardTitle>Currency</CardTitle>
+            <CardTitle className="text-amber-500">Currency</CardTitle>
             <CardDescription>
               Set your default currency for your account
             </CardDescription>
@@ -88,7 +88,7 @@ function CategoryList({ type }: { type: TransactionType }) {
               successCallback={() => categoriesQuery.refetch()}
               trigger={
                 <Button className="gap-2 text-sm" variant={'secondary'}>
-                  <PlusSquare className="h-4 w-4" />
+                  <Plus className="h-4 w-4" />
                   Create Category
                 </Button>
               }
