@@ -70,7 +70,7 @@ function CategoriesCard({
   );
 
   return (
-    <Card className="h-80 w-full col-span-6">
+    <Card className="h-90 w-full col-span-6">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col text-amber-500 font-semibold">
           {type === 'income' ? 'Incomes' : 'Expenses'} by category
@@ -78,7 +78,7 @@ function CategoriesCard({
       </CardHeader>
       <div className="flex items-center justify-between gap-2">
         {filteredData.length === 0 && (
-          <div className="flex h-60 w-full flex-col items-center justify-center">
+          <div className="flex h-80 w-full flex-col items-center justify-center">
             No data available for this period
             <p className="text-md text-muted-foreground">
               Try changing the date range or adding some new{' '}
@@ -87,7 +87,7 @@ function CategoriesCard({
           </div>
         )}
         {filteredData.length > 0 && (
-          <ScrollArea className="h-60 w-full px-4">
+          <ScrollArea className="h-80 w-full px-4">
             <div className="flex w-full flex-col gap-4 p-4">
               {filteredData.map((item) => {
                 const amount = item._sum?.amount || 0;

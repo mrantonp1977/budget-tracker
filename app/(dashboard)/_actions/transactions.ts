@@ -18,7 +18,13 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
     redirect("/sign-in");
   }
 
-  const { amount, category, description, type } = parsedBody.data;
+  const { amount, category, date, description, type } = parsedBody.data;
+
+  const transactionDate = date ? new Date(date) : new Date();
+
+  if (isNaN(transactionDate.getTime())) {
+    throw new Error("Invalid date format");
+  }
 
   const categoryRow = await prisma.category.findFirst({
     where: {
@@ -41,7 +47,7 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
       data: {
         userId: user.id,
         amount,
-        date: now,  // Use 'now' for consistent date
+        date: now,
         description: description || "",
         type,
         category: categoryRow.name,
