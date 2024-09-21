@@ -12,7 +12,7 @@ import { UserButton } from '@clerk/nextjs';
 
 function DesktopNavbar() {
   return (
-    <div className="hidden border-separate border-b bg-background md:block">
+    <div className="hidden border-separate border-b-4 dark:bg-slate-900 md:block">
       <nav className="flex items-center justify-between px-8">
         <div className="flex h-[70px] min-h-[60px] items-center gap-x-4">
           <Logo />

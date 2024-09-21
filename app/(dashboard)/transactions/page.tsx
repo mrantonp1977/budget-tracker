@@ -2,24 +2,23 @@
 
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { MAX_DATE_RANGE_DAYS } from '@/lib/constants';
-import { UserSettings } from '@prisma/client';
 import { differenceInDays, startOfMonth } from 'date-fns';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import StatsCards from './StatsCards';
-import CategoriesStats from './CategoriesStats';
+import TransactionTable from './_components/TransactionTable';
 
-function Overview({ userSettings }: { userSettings: UserSettings }) {
-  // const now = new Date()
+function TransactionsPage() {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date(),
   });
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between px-7 py-8 mt-5">
-        <h2 className="text-3xl font-bold dark:text-cyan-500">Overview</h2>
-        <div className="flex items-center gap-3">
+      <div className="bg-card mt-8">
+        <div className="flex flex-wrap items-center justify-between px-8 py-8">
+          <div className="">
+            <p className="text-3xl font-bold dark:text-cyan-500">Transactions History</p>
+          </div>
           <DateRangePicker
             initialDateFrom={dateRange.from}
             initialDateTo={dateRange.to}
@@ -38,22 +37,11 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
           />
         </div>
       </div>
-      <div className="flex w-full flex-col px-8 py-4">
-        <StatsCards
-          userSettings={userSettings}
-          from={dateRange.from}
-          to={dateRange.to}
-        />
-        <div className="pt-5">
-        <CategoriesStats 
-          userSettings={userSettings}
-          from={dateRange.from}
-          to={dateRange.to}
-        />
-        </div>
+      <div className="flex flex-wrap items-center justify-between px-8 py-8">
+        <TransactionTable from={dateRange.from} to={dateRange.to}/>
       </div>
     </>
   );
 }
 
-export default Overview;
+export default TransactionsPage;

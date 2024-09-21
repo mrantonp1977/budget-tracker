@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import React from 'react';
 import RootProviders from '@/components/providers/RootProviders';
 import { Toaster } from '@/components/ui/sonner';
-import { dark } from '@clerk/themes'
+import { dark, shadesOfPurple } from '@clerk/themes'
 
 
 const geistSans = localFont({
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={{
-      baseTheme: dark,
+      baseTheme: shadesOfPurple,
     }}>
       <html
         lang="en"

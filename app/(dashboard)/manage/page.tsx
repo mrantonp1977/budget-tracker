@@ -23,10 +23,10 @@ import DeleteCategoryDialog from '../_components/DeleteCategoryDialog';
 function page() {
   return (
     <>
-      <div className="border-b bg-card">
+      <div className="bg-card mt-8">
         <div className="flex flex-wrap items-center justify-between px-8 py-8">
           <div className="">
-            <p className="text-3xl font-bold">Manage</p>
+            <p className="text-3xl font-bold dark:text-cyan-500">Manage</p>
             <p className="text-muted-foreground">
               Manage your account settings and categories
             </p>
@@ -36,7 +36,7 @@ function page() {
       <div className="flex flex-col px-4 p-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-amber-500">Currency</CardTitle>
+            <CardTitle className="dark:text-amber-500">Currency</CardTitle>
             <CardDescription>
               Set your default currency for your account
             </CardDescription>
@@ -74,7 +74,7 @@ function CategoryList({ type }: { type: TransactionType }) {
               ) : (
                 <TrendingUp className="h-12 w-12 items-center rounded-lg bg-green-400/10 text-green-500" />
               )}
-              <div className="p-5 text-amber-500">
+              <div className="p-5 dark:text-amber-500">
                 {type === 'income'
                   ? 'Incomes Categories'
                   : 'Expenses Categories'}

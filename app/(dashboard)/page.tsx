@@ -24,13 +24,13 @@ async function page() {
   }
 
   return (
-    <div className="h-full">
-      <div className="border-b bg-card">
-        <div className="flex flex-wrap items-center justify-between px-7 py-8">
+    <div className="h-full mt-8">
+      <div className="bg-card">
+        <div className="flex flex-wrap items-center justify-between px-16 py-8">
           <p className="text-3xl font-bold">
-            Welcome, <span className="text-amber-500">{user.firstName}</span> 👋
+            Welcome, <span className="dark:text-amber-500 text-blue-800">{user.firstName} {user.lastName}</span> 👋
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <CreateTransactionDialog
               trigger={
                 <Button

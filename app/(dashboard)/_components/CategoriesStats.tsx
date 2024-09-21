@@ -72,7 +72,7 @@ function CategoriesCard({
   return (
     <Card className="h-90 w-full col-span-6">
       <CardHeader>
-        <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col text-amber-500 font-semibold">
+        <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col dark:text-amber-500 font-semibold">
           {type === 'income' ? 'Incomes' : 'Expenses'} by category
         </CardTitle>
       </CardHeader>
