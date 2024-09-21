@@ -91,7 +91,7 @@ function StatsCard({
   );
 
   return (
-    <Card className="flex h-24 w-full items-center gap-2 p-4">
+    <Card className="flex h-24 w-full items-center gap-12 p-6">
       {icon}
       <div className="flex flex-col items-start gap-0">
         <p className="dark:text-amber-500 font-semibold text-xl">
