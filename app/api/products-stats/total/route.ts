@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { OverviewQuerySchema } from "@/schema/overview";
+import { ProductOverviewQuerySchema } from "@/schema/product-overview";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -17,26 +18,26 @@ export async function GET(request: Request) {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
 
-  const queryParams = OverviewQuerySchema.safeParse({ from, to });
+  const queryParams = ProductOverviewQuerySchema.safeParse({ from, to });
 
   if (!queryParams.success) {
     return new Response("Invalid query params", { status: 400 });
   }
 
-  const stats = await getBalanceStats(
+  const productStats = await getTotalStats(
     user.id,
     queryParams.data.from,
     queryParams.data.to,
   );
 
-  return Response.json(stats);
+  return Response.json(productStats);
 
 }
 
-export type getBalanceStatsResponseType = Awaited<ReturnType<typeof getBalanceStats>>;
+export type getTotalStatsResponseType = Awaited<ReturnType<typeof getTotalStats>>;
 
-async function getBalanceStats(userId: string, from: Date, to: Date) {
-  const totals = await prisma.transaction.groupBy({
+async function getTotalStats(userId: string, from: Date, to: Date) {
+  const totalsProduct = await prisma.productTransaction.groupBy({
     by: ["type"],
     where: {
       userId,
@@ -51,7 +52,7 @@ async function getBalanceStats(userId: string, from: Date, to: Date) {
   });
 
   return {
-    expense: totals.find((t) => t.type === "expense")?._sum.amount || 0,
-    income: totals.find((t) => t.type === "income")?._sum.amount || 0,
+    chestnuts: totalsProduct.find((t) => t.type === "chestnuts")?._sum.amount || 0,
+    cherries: totalsProduct.find((t) => t.type === "cherries")?._sum.amount || 0,
   }
 }

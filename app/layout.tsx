@@ -20,8 +20,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Budget Tracker',
-  description: 'A simple budget tracker app',
+  title: 'Agro Finanses',
+  description: 'Agro Finanses is a platform for managing your finances.',
 };
 
 export default function RootLayout({

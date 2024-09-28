@@ -5,21 +5,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { toast } from 'sonner';
 import { DeleteTransaction } from '../_actions/deleteTransaction';
+import { DeleteProductTransaction } from '../_actions/deleteProductTransaction';
 
-interface DeleteTransactionDialogProps {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   transactionId: string;
 }
 
-function DeleteTransactionDialog({
+function DeleteProductTransactionDialog({
   open,
   setOpen,
   transactionId,
-}: DeleteTransactionDialogProps) {
+}: Props) {
   const queryClient = useQueryClient();
   const deleteMutation = useMutation({
-    mutationFn: DeleteTransaction,
+    mutationFn: DeleteProductTransaction,
     onSuccess: async () => {
       toast.success('Transaction deleted successfully', {
         id: transactionId,
@@ -66,4 +67,4 @@ function DeleteTransactionDialog({
   );
 }
 
-export default DeleteTransactionDialog;
+export default DeleteProductTransactionDialog;

@@ -15,13 +15,13 @@ import {
   YAxis,
 } from 'recharts';
 import React, { useCallback, useMemo, useState } from 'react';
-import HistoryPeriodSelector from './HistoryPeriodSelector';
 import { useQuery } from '@tanstack/react-query';
 import SkeletonWrapper from '@/components/SkeletonWrapper';
 import { cn } from '@/lib/utils';
 import CountUp from 'react-countup';
+import ProductHistoryPeriodSelector from './ProductHistoryPeriodSelector';
 
-function History({ userSettings }: { userSettings: UserSettings }) {
+function ProductHistory({ userSettings }: { userSettings: UserSettings }) {
   const [timeFrame, setTimeFrame] = useState<Timeframe>('month');
   const [period, setPeriod] = useState<Period>({
     year: new Date().getFullYear(),
@@ -32,24 +32,33 @@ function History({ userSettings }: { userSettings: UserSettings }) {
     return GetFormatterForCurrency(userSettings.currency);
   }, [userSettings.currency]);
 
-  const historyDataQuery = useQuery({
-    queryKey: ['overview', 'history', timeFrame, period],
+  const kiloFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'unit',
+      unit: 'kilogram',
+    });
+  }, []);
+
+  const productHistoryDataQuery = useQuery({
+    queryKey: ['productOverview', 'productHistory', timeFrame, period],
     queryFn: () =>
       fetch(
-        `/api/history-data?timeframe=${timeFrame}&month=${period.month}&year=${period.year}`
+        `/api/product-history-data?timeframe=${timeFrame}&month=${period.month}&year=${period.year}`
       ).then((res) => res.json()),
   });
 
   const dataAvailable =
-    historyDataQuery.data && historyDataQuery.data.length > 0;
+    productHistoryDataQuery.data && productHistoryDataQuery.data.length > 0;
 
   return (
     <div className="flex flex-wrap items-end justify-between px-7 py-8">
-      <h2 className="mt-8 mb-8 text-3xl font-bold dark:text-cyan-500">Finanses History</h2>
+      <h2 className="mt-8 mb-8 text-3xl font-bold dark:text-cyan-500">
+        Products History
+      </h2>
       <Card className="col-span-12 mt-2 w-full">
         <CardHeader className="gap-2">
           <CardTitle className="grid grid-flow-row justify-between gap-2 md:grid-flow-col">
-            <HistoryPeriodSelector
+            <ProductHistoryPeriodSelector
               period={period}
               setPeriod={setPeriod}
               timeFrame={timeFrame}
@@ -60,61 +69,74 @@ function History({ userSettings }: { userSettings: UserSettings }) {
                 variant={'outline'}
                 className="flex items-center gap-2 text-md"
               >
-                <div className="h-4 w-4 rounded-full bg-emerald-500"></div>
-                Incomes
+                <div className="h-4 w-4 rounded-full bg-orange-500"></div>
+                Chestnuts
               </Badge>
               <Badge
                 variant={'outline'}
                 className="flex items-center gap-2 text-md"
               >
-                <div className="h-4 w-4 rounded-full bg-rose-500"></div>
-                Expenses
+                <div className="h-4 w-4 rounded-full bg-purple-500"></div>
+                Cherries
               </Badge>
               <Badge
                 variant={'outline'}
                 className="flex items-center gap-2 text-md"
               >
                 <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                Balance
+                Total Kilos
               </Badge>
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <SkeletonWrapper isLoading={historyDataQuery.isFetching}>
+          <SkeletonWrapper isLoading={productHistoryDataQuery.isFetching}>
             {dataAvailable && (
               <ResponsiveContainer width={'100%'} height={300}>
                 <BarChart
                   height={300}
-                  data={historyDataQuery.data}
+                  data={productHistoryDataQuery.data}
                   barCategoryGap={5}
                 >
                   <defs>
-                    <linearGradient id="incomeBar" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="chestnutsBar"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop
                         offset={'0'}
-                        stopColor="#10b981"
+                        stopColor="#f97316"
                         stopOpacity={'1'}
                       />
                       <stop
                         offset={'1'}
-                        stopColor="#10b981"
+                        stopColor="#f97316"
                         stopOpacity={'0'}
                       />
                     </linearGradient>
-                    <linearGradient id="expenseBar" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="cherriesBar"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop
                         offset={'0'}
-                        stopColor="#ef4444"
+                        stopColor="#a855f7"
                         stopOpacity={'1'}
                       />
                       <stop
                         offset={'1'}
-                        stopColor="#ef4444"
+                        stopColor="#a855f7"
                         stopOpacity={'0'}
                       />
                     </linearGradient>
                   </defs>
+
                   <CartesianGrid
                     strokeDasharray="5 5"
                     strokeOpacity={'0.2'}
@@ -142,23 +164,23 @@ function History({ userSettings }: { userSettings: UserSettings }) {
                     axisLine={false}
                   />
                   <Bar
-                    dataKey={'income'}
-                    label="Incomes"
-                    fill="url(#incomeBar)"
+                    dataKey={'chestnuts'}
+                    label="Chestnuts"
+                    fill="url(#chestnutsBar)"
                     radius={4}
                     className="cursor-pointer"
                   />
                   <Bar
-                    dataKey={'expense'}
-                    label="Expenses"
-                    fill="url(#expenseBar)"
+                    dataKey={'cherries'}
+                    label="Cherries"
+                    fill="url(#cherriesBar)"
                     radius={4}
                     className="cursor-pointer"
                   />
                   <Tooltip
                     cursor={{ opacity: '0.1' }}
                     content={(props) => (
-                      <CustomTooltip formatter={formatter} {...props} />
+                      <CustomTooltip formatter={kiloFormatter} {...props} />
                     )}
                   />
                 </BarChart>
@@ -179,34 +201,34 @@ function History({ userSettings }: { userSettings: UserSettings }) {
   );
 }
 
-export default History;
+export default ProductHistory;
 
-function CustomTooltip({ active, payload, formatter }: any) {
+function CustomTooltip({ active, payload, kiloFormatter }: any) {
   if (!active || !payload || payload.length === 0) return null;
 
   const data = payload[0].payload;
-  const { income, expense } = data;
+  const { chestnuts, cherries } = data;
 
   return (
     <div className="min-w-[300px] rounded border bg-background p-4">
       <TooltipRow
-        formatter={formatter}
-        label="Expenses"
-        value={expense}
-        bgColor="bg-red-500"
-        textColor="text-red-500"
+        formatter={kiloFormatter}
+        label="Cherries"
+        value={cherries}
+        bgColor="bg-purple-500"
+        textColor="text-purple-500"
       />
       <TooltipRow
-        formatter={formatter}
-        label="Incomes"
-        value={income}
-        bgColor="bg-emerald-500"
-        textColor="text-emerald-500"
+        formatter={kiloFormatter}
+        label="Chestnuts"
+        value={chestnuts}
+        bgColor="bg-orange-500"
+        textColor="text-orange-500"
       />
       <TooltipRow
-        formatter={formatter}
-        label="Balance"
-        value={income - expense}
+        formatter={kiloFormatter}
+        label="Total Kilos"
+        value={chestnuts + cherries}
         bgColor="bg-blue-500"
         textColor="text-forground"
       />
@@ -227,8 +249,7 @@ function TooltipRow({
   textColor: string;
   formatter: Intl.NumberFormat;
 }) {
-
-  const formattingFn = useCallback((value: number) => {return formatter.format(value)}, [formatter]);
+  // const formattingFn = useCallback((value: number) => {return formatter.format(value)}, [formatter]);
   return (
     <div className="flex items-center gap-2">
       <div className={cn('h-4 w-4 rounded-full', bgColor)} />
@@ -240,7 +261,7 @@ function TooltipRow({
             preserveValue
             end={value}
             decimal="0"
-            formattingFn={formattingFn}
+            // formattingFn={formattingFn}
             className="text-sm"
           />
         </div>

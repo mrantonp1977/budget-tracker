@@ -77,6 +77,7 @@ function StatsCard({
   value,
   formatter,
   icon,
+  
 }: {
   title: string;
   value: number;

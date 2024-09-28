@@ -6,11 +6,11 @@ import { UserSettings } from '@prisma/client';
 import { differenceInDays, startOfMonth } from 'date-fns';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import StatsCards from './StatsCards';
-import CategoriesStats from './CategoriesStats';
+import ProductStatsCards from './ProductStatsCards';
+import ProductCategoriesStats from './ProductCategoriesStats';
 
-function Overview({ userSettings }: { userSettings: UserSettings }) {
-  // const now = new Date()
+
+function ProductOverview({ userSettings }: { userSettings: UserSettings }) {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date(),
@@ -18,7 +18,7 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
   return (
     <>
       <div className="flex flex-wrap items-end justify-between px-7 py-8">
-        <h2 className="text-3xl font-bold dark:text-cyan-500">Finanses Overview</h2>
+        <h2 className="text-3xl font-bold dark:text-cyan-500">Products Overview</h2>
         <div className="flex items-center gap-3">
           <DateRangePicker
             initialDateFrom={dateRange.from}
@@ -39,13 +39,13 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
         </div>
       </div>
       <div className="flex w-full flex-col px-8 py-4">
-        <StatsCards
+        <ProductStatsCards
           userSettings={userSettings}
           from={dateRange.from}
           to={dateRange.to}
         />
         <div className="pt-5">
-        <CategoriesStats 
+        <ProductCategoriesStats 
           userSettings={userSettings}
           from={dateRange.from}
           to={dateRange.to}
@@ -56,4 +56,4 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
   );
 }
 
-export default Overview;
+export default ProductOverview;

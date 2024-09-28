@@ -10,8 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url      = env("DATABASE_URL")
 }
 
 model UserSettings {
@@ -29,6 +28,16 @@ model Category {
   @@unique([name, userId, type])
 }
 
+model ProductCategory {
+  createdAt DateTime @default(now())
+  name      String
+  userId    String
+  icon      String
+  type      String   @default("chestnuts")
+
+  @@unique([name, userId, type])
+}
+
 model Transaction {
   id           String   @id @default(uuid())
   createdAt    DateTime @default(now())
@@ -42,6 +51,19 @@ model Transaction {
   categoryIcon String
 }
 
+model ProductTransaction {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  amount       Float
+  description  String
+  date         DateTime
+  userId       String
+  type         String   @default("chestnuts")
+  productCategory     String
+  productCategoryIcon String
+}
+
 model MonthHistory {
   userId  String
   day     Int
@@ -53,12 +75,33 @@ model MonthHistory {
   @@unique([userId, day, month, year])
 }
 
+model ProductMonthHistory {
+  userId    String
+  day       Int
+  month     Int
+  year      Int
+  chestnuts Float
+  cherries  Float
+
+  @@unique([userId, day, month, year])
+}
+
 model YearHistory {
   userId  String
   month   Int
   year    Int
   income  Float
   expense Float
+
+  @@unique([userId, year, month])
+}
+
+model ProductYearHistory {
+  userId    String
+  month     Int
+  year      Int
+  chestnuts Float
+  cherries  Float
 
   @@unique([userId, year, month])
 }

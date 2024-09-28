@@ -1,7 +1,15 @@
 export const items = [
   {
-    label: 'Dashboard',
+    label: 'Home',
     link: "/"
+  },
+  {
+    label: 'Finanses Overview',
+    link: "/finansesTransactions"
+  },
+  {
+    label: 'Products Overview',
+    link: "/productsTransactions"
   },
   {
     label: 'Transactions',

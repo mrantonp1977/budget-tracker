@@ -1,50 +1,60 @@
 'use client';
 
-import { getCategoriesStatsResponseType } from '@/app/api/stats/categories/route';
+import { getProductCategoriesStatsResponseType } from '@/app/api/products-stats/product-categories/route';
+
 import SkeletonWrapper from '@/components/SkeletonWrapper';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { DateToUTCDate, GetFormatterForCurrency } from '@/lib/helpers';
-import { TransactionType } from '@/lib/types';
+import { ProductType } from '@/lib/types';
 import { UserSettings } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 
-interface CategoriesStatsProps {
+interface Props {
   userSettings: UserSettings;
   from: Date;
   to: Date;
 }
 
-function CategoriesStats({ userSettings, from, to }: CategoriesStatsProps) {
-  const statsQuery = useQuery<getCategoriesStatsResponseType>({
-    queryKey: ['overview', 'stats', 'categories', from, to],
+function ProductCategoriesStats({ userSettings, from, to }: Props) {
+  const statsQuery = useQuery<getProductCategoriesStatsResponseType>({
+    queryKey: ['productOverview', 'productStats', 'productCategories', from, to],
     queryFn: () =>
       fetch(
-        `/api/stats/categories?from=${DateToUTCDate(from)}&to=${DateToUTCDate(
+        `/api/products-stats/product-categories?from=${DateToUTCDate(from)}&to=${DateToUTCDate(
           to
         )}`
       ).then((res) => res.json()),
   });
 
-  const formatter = useMemo(() => {
-    return GetFormatterForCurrency(userSettings.currency);
-  }, [userSettings.currency]);
+  // const formatter = useMemo(() => {
+  //   return GetFormatterForCurrency(userSettings.currency);
+  // }, [userSettings.currency]);
+
+  const kiloFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'unit',
+      unit: 'kilogram',
+      // minimumFractionDigits: 2,
+      // maximumFractionDigits: 2,
+    });
+  }, []);
 
   return (
     <div className="flex w-full flex-wrap gap-2 md:flex-nowrap">
       <SkeletonWrapper isLoading={statsQuery.isFetching}>
-        <CategoriesCard
-          formatter={formatter}
-          type="income"
+        <ProductCategoriesCard
+          formatter={kiloFormatter}
+          type="chestnuts"
           data={statsQuery.data || []}
         />
       </SkeletonWrapper>
       <SkeletonWrapper isLoading={statsQuery.isFetching}>
-        <CategoriesCard
-          formatter={formatter}
-          type="expense"
+        <ProductCategoriesCard
+          formatter={kiloFormatter}
+          type="cherries"
           data={statsQuery.data || []}
         />
       </SkeletonWrapper>
@@ -52,16 +62,16 @@ function CategoriesStats({ userSettings, from, to }: CategoriesStatsProps) {
   );
 }
 
-export default CategoriesStats;
+export default ProductCategoriesStats;
 
-function CategoriesCard({
+function ProductCategoriesCard({
   formatter,
   type,
   data,
 }: {
-  type: TransactionType;
+  type: ProductType;
   formatter: Intl.NumberFormat;
-  data: getCategoriesStatsResponseType;
+  data: getProductCategoriesStatsResponseType;
 }) {
   const filteredData = data.filter((el) => el.type === type);
   const total = filteredData.reduce(
@@ -73,7 +83,7 @@ function CategoriesCard({
     <Card className="h-90 w-full col-span-6">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col dark:text-blue-300 font-semibold">
-          {type === 'income' ? 'Incomes' : 'Expenses'} by category
+          {type === 'chestnuts' ? 'Chestnuts' : 'Cherries'} by category
         </CardTitle>
       </CardHeader>
       <div className="flex items-center justify-between gap-2">
@@ -82,7 +92,7 @@ function CategoriesCard({
             No data available for this period
             <p className="text-md text-muted-foreground">
               Try changing the date range or adding some new{' '}
-              {type === 'income' ? 'incomes' : 'expenses'}
+              {type === 'chestnuts' ? 'Chestnuts' : 'Cherries'}
             </p>
           </div>
         )}
@@ -94,10 +104,10 @@ function CategoriesCard({
                 const percentage = (amount * 100) / (total || amount);
 
                 return (
-                  <div key={item.category} className="flex flex-col gap-2">
+                  <div key={item.productCategory} className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="flex items-center font-semibold">
-                        {item.categoryIcon} {item.category}
+                        {item.productCategoryIcon} {item.productCategory}
                         <span className="ml-2 text-sm text-muted-foreground">
                           ({percentage.toFixed(0)}%)
                         </span>
@@ -108,7 +118,7 @@ function CategoriesCard({
                     </div>
                     <Progress 
                       value={percentage} 
-                      indicator={type === 'income' ? 'bg-emerald-500' : 'bg-rose-500'}
+                      indicator={type === 'chestnuts' ? 'bg-orange-700' : 'bg-purple-600'}
                     />
                   </div>
                 );
